@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title> Homepage </title>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script>
+        <script src="sketch.js"></script>
+    </head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+       .containter {
+            display: flex;
+            flex-direction: column;
+       }
+
+       .top-nav {
+            display: flex;
+            background-color: #555;
+            width: 100%;
+            justify-content:  space-around;
+            padding: 1mm;
+       }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style-type: none;
+       }
+
+        .content-containter {
+            display: flex;
+            width: 100%;
+        }
+        .content-containter .side-nav {
+            background-color: #ddd;
+            height: 100vh;
+            min-width: 200px;
+        }
+
+        .content-containter .side-nav li {
+            padding: 10px;
+        }
+        .content-containter .content {
+            padding: 1em;
+        }
+        .side-nav-item {
+            cursor: pointer;
+        }
+
+        .iframe {
+            width: 500px;
+            height: 500px;
+        }
+
+    </style>
+    <body>
+        <div class="container">
+            <ul class="top-nav">
+                 <li>Home</li>
+                 <li>About</li>
+                 <li>Contact</li>
+            </ul>
+            
+            <div class="content-containter">
+                    <div class="side-nav">
+                        <ul>
+                            <li class="side-nav-item" data-id="Project_1">Project 1</li>
+                            <li class="side-nav-item" data-id="Project_2">Project 2</li>
+                            <li class="side-nav-item" data-id="Project_3">Project 3</li>
+                        </ul>
+                    </div>
+                <div class="content">
+                    <div class="project project_1">
+                        <main></main>
+                    </div>
+                    <div class="project project_2" hidden>
+                        <iframe class="iframe" src= "https://editor.p5js.org/kcardonacervantes/full/hvTc-tt-g"></iframe> 
+                    </div>
+                    <div class="project project_3" hidden>
+                        <iframe class="iframe" src= "https://editor.p5js.org/kcardonacervantes/full/qVQXQCp3O"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </body>
+</html>
