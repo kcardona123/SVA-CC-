@@ -12,6 +12,7 @@ function setup() {
     fill(random(255));
   }
 
+  
   function draw() {
     background(220);
     rect(100,100,100);
