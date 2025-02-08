@@ -6,9 +6,11 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  imgAspect = img.height / img.width; // Calculate aspect ratio
-}
+    let canvas = createCanvas(windowWidth, windowHeight); // Create canvas
+    canvas.parent(document.body); //  <body> to apply CSS
+  
+    imgAspect = img.height / img.width; // Calculate aspect ratio
+  }
 
 function draw() {
   let scaledHeight = windowWidth * imgAspect; // Maintain proportion
