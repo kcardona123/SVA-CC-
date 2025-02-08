@@ -16,7 +16,7 @@
 
     
         body {
-            display: flex;
+            
             justify-content: center; 
             align-items: flex-start; 
             height: 100vh;
@@ -25,14 +25,62 @@
 
        
         canvas {
-            display: block; 
-            margin-top: 0px;
-            padding: 0px; 
-            background-color: white; 
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            width: 100%;
+        }
+        
+        .content {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #555;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        section {
+            padding: 100px 20px;
+        }
+
+    
+        .section-one {
+            background-color: #d84848;
+        }
+
+        .section-two {
+            background-color: #cfcfcf;
         }
 
     </style>
     <body>
+        <div class="content">
+            <h1>Welcome to Vital!</h1>
+            <p>Scroll down to see more information.</p>
+        </div>
+
+        <section class="section-one">
+            <div class="content">
+                <h2>About Us</h2>
+                <p>This is where you can add some text about the project, your team, or the purpose of the website.</p>
+            </div>
+        </section>
+
+        <section class="section-two">
+            <div class="content">
+                <h2>More Information</h2>
+                <p>Here, you can talk about the details of your project, your goals, or any other content you'd like to share.</p>
+            </div>
+        </section>
 
     </body>
 <html> 
