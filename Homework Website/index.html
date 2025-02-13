@@ -1,36 +1,35 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vital</title>
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script>
-        <script src="sketch.js"></script>
-        <script src="interactive.js"></script> 
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vital</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script>
+    <script src="sketch.js"></script>
     <style>
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-    
         body {
-            
-            justify-content: center; 
-            align-items: flex-start; 
-            height: 100vh;
-            background-color: rgb(255, 255, 255); 
+            text-align: center;
+            background-color: rgb(255, 255, 255);
         }
-      
-        canvas {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
+
+        .logo-container {
             width: 100%;
+            max-width: 100%;
+            overflow: hidden;
         }
-        
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .content {
             padding: 50px 20px;
             text-align: center;
@@ -52,7 +51,6 @@
             padding: 100px 20px;
         }
 
-    
         .section-one {
             background-color: #d84848;
         }
@@ -60,27 +58,32 @@
         .section-two {
             background-color: #cfcfcf;
         }
-
     </style>
-    <body>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="VitalLogo.png" alt="Vital Logo">
+    </div>
+
+    <div class="content">
+        <h1>Welcome to Vital!</h1>
+        <p>Scroll down to see more information.</p>
+    </div>
+
+    <section class="section-one">
         <div class="content">
-            <h1>Welcome to Vital!</h1>
-            <p>Scroll down to see more information.</p>
+            <h2>About Us</h2>
+            <p>This is where you can add some text about the project, your team, or the purpose of the website.</p>
         </div>
+    </section>
 
-        <section class="section-one">
-            <div class="content">
-                <h2>About Us</h2>
-                <p>This is where you can add some text about the project, your team, or the purpose of the website.</p>
-            </div>
-        </section>
+    <section class="section-two">
+        <div class="content">
+            <h2>More Information</h2>
+            <p>Here, you can talk about the details of your project, your goals, or any other content you'd like to share.</p>
+        </div>
+    </section>
 
-        <section class="section-two">
-            <div class="content">
-                <h2>More Information</h2>
-                <p>Here, you can talk about the details of your project, your goals, or any other content you'd like to share.</p>
-            </div>
-        </section>
-
-    </body>
-<html> 
+</body>
+</html>
