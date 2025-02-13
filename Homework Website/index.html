@@ -33,15 +33,16 @@
             z-index: 1; /* Above the background */
             width: 100%;
             max-width: 100%;
-            background-color: none;
+            background-color: transparent;
         }
 
         .logo-container img {
             width: 100%;
             height: auto;
             display: block;
-            mix-blend-mode: screen; /* Ensures transparency */
-            background: none; /* Explicitly set transparency */
+             /* Or 'darken' if needed */
+            background-color: none;
+            mix-blend-mode: multiply;
         }
 
         .content {
