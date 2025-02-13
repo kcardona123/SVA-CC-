@@ -11,7 +11,7 @@ function setup() {
     canvas.style('top', '0');
     canvas.style('left', '0');
     canvas.style('z-index', '-1');
-  background(60, 40, 20); // Warm coffee brown, set it only once here
+  background(53,36,24); // Warm coffee brown, set it only once here
   
 }
 
@@ -101,7 +101,7 @@ class Particle {
 
   show() {
     // Draw particle with fading alpha and smoother size transitions
-    fill(255, 230, 200, this.alpha); // Use particle's alpha value for fading
+    fill(178, 147, 125, this.alpha); // Use particle's alpha value for fading
     noStroke();
     ellipse(this.x, this.y, this.size);
   }
