@@ -5,7 +5,23 @@ class Particle {
         this.acc = createVector();
         this.r = r;
         this.friction = .995;
+        this.maxAge = random(10, 100);
+        this.age = 0;
       
+    }
+   
+   
+    update() {
+        this.age++;
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+        this.vel.mult(this.friction);
+        //this.bounce();
+    }
+   
+    isDead() {
+        return this.age > this.maxAge;
     }
    
     applyForce(force) {
@@ -27,15 +43,6 @@ class Particle {
             this.pos.x = 0;
             this.vel.x *=-1;
         }
-    }
-
-    update() {
-    
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.acc.mult(0);
-        this.vel.mult(this.friction);
-        this.bounce();
     }
 
     display() {
