@@ -19,7 +19,14 @@ class Particle {
         this.vel.mult(this.friction);
         //this.bounce();
     }
-   
+    
+    display() {
+        noStroke();
+        const alpha = map(this.age, 0, this.maxAge, 255, 0);
+        fill(255, alpha);
+        circle(this.pos.x, this.pos.y, this.r * 2);
+    }
+
     isDead() {
         return this.age > this.maxAge;
     }
@@ -45,7 +52,5 @@ class Particle {
         }
     }
 
-    display() {
-        circle(this.pos.x, this.pos.y, this.r * 2);
-    }
+    
 }
