@@ -7,7 +7,8 @@ class Particle {
         this.friction = .995;
         this.isActive = false;
     }
-    setActive() {
+    setActive() { 
+        
 
     }
     
