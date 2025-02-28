@@ -15,11 +15,15 @@ function setup() {
 
 function draw() {
     background(190); 
-    for (let i=0; i , boxes.length; i++) {
+    for (let i=0; i < boxes.length; i++) {
         const box = boxes[i];
-        rect(box.position.x, box.position.y, boxSize, boxSize);
+        push();
+        translate(box.position.x, box.position.y);
+        rotate(box.angle);
+        rect(0,0, boxSize, boxSize);
+        pop();
     }
-    Matter.Engine.update(engine, 100/30);
+    Matter.Engine.update(engine, 1000/30);
 }
 
 function addBox(x, y) {
