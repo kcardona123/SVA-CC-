@@ -1,8 +1,8 @@
 class Ball {
-    constructor(x, y, vx) {
+    constructor(x, y, vx, speed) {
         this.r = 20;
         this.body = Matter.Bodies.circle(x, y, this.r, { restitution: 0.6 });
-        Matter.Body.setVelocity(this.body, { x: vx, y: 3 });
+        Matter.Body.setVelocity(this.body, { x: vx, y: speed });
         Matter.World.add(world, this.body);
     }
 
