@@ -7,7 +7,7 @@ class Ball {
     }
 
     update() {
-        // Ball movement is handled by Matter.js physics
+        // Ball movement handled by physics engine
     }
 
     display() {

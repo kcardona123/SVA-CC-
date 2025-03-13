@@ -6,21 +6,21 @@ function setup() {
     createCanvas(600, 600);
     engine = Matter.Engine.create();
     world = engine.world;
-    world.gravity.y = 0.5; // Gravity for the balls
+    world.gravity.y = 0.5;
 
     game = new Game();
     startButton = new StartButton();
 }
 
 function draw() {
-    background(220);
+    background(220); // White background
     Matter.Engine.update(engine);
 
     if (!game.gameStarted) {
         startButton.display();
     } else {
         game.update();
-        displayUI();
+        game.displayUI();
     }
 }
 

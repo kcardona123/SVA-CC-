@@ -24,8 +24,13 @@ class StartButton {
     }
 
     checkClick() {
-        if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
-            gameStarted = true;
+        if (
+            mouseX > this.x &&
+            mouseX < this.x + this.w &&
+            mouseY > this.y &&
+            mouseY < this.y + this.h
+        ) {
+            game.startGame(); // Now correctly starts the game
         }
     }
 }

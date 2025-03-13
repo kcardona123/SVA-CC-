@@ -39,7 +39,7 @@ class Game {
 
     spawnBall() {
         let x = random(100, 500);
-        let vx = random(-2, 2); // Horizontal velocity
+        let vx = random(-2, 2);
         let ball = new Ball(x, 0, vx);
         this.balls.push(ball);
     }
@@ -57,5 +57,13 @@ class Game {
         this.particles = [];
         this.lives = 3;
         this.score = 0;
+    }
+
+    displayUI() {
+        fill(0);
+        textSize(20);
+        textAlign(RIGHT);
+        text(`Lives: ${this.lives}`, width - 20, 30);
+        text(`Score: ${this.score}`, width - 20, 60);
     }
 }
