@@ -12,7 +12,7 @@ class Ball {
 
     display() {
         let pos = this.body.position;
-        fill(0);
+        fill(255);
         noStroke();
         ellipse(pos.x, pos.y, this.r * 2);
     }

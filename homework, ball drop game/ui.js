@@ -2,7 +2,7 @@ let highScore = 0;
 let longestTime = 0;
 
 function displayUI() {
-    fill(0);
+    fill(255);
     textSize(20);
     textAlign(RIGHT);
     text(`Lives: ${game.lives}`, width - 20, 30);
@@ -26,7 +26,7 @@ class StartButton {
         text("Click to Start", this.x + this.w / 2, this.y + this.h / 2);
 
         // Display High Score & Longest Time
-        fill(0);
+        fill(255);
         textSize(20);
         textAlign(CENTER, CENTER);
         text(`High Score: ${highScore}`, width / 2, height / 2 + 70);

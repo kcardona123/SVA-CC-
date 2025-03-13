@@ -19,6 +19,7 @@ class Game {
         this.ballSpeed = 3; // Reset ball speed to initial value
         this.spawnRate = 60; // Reset spawn rate to initial value
         this.ballsDropped = 0; // Reset the number of balls dropped
+        frameCount = 0;
     }
 
     update() {
@@ -108,7 +109,7 @@ class Game {
     }
 
     displayUI() {
-        fill(0);
+        fill(255);
         textSize(20);
         textAlign(RIGHT);
         text(`Lives: ${this.lives}`, width - 20, 30);

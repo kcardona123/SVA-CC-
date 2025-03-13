@@ -13,7 +13,7 @@ function setup() {
 }
 
 function draw() {
-    background(220); // White background
+    background(0, 0, 0, 150); // White background
     Matter.Engine.update(engine);
 
     if (!game.gameStarted) {
