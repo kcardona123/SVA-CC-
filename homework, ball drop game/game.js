@@ -71,8 +71,9 @@ class Game {
         // Spawn balls with current ballSpeed
         for (let i = 0; i < ballsToSpawn; i++) {
             let x = random(100, 500);
-            let vx = random(-2, 2);
-            let ball = new Ball(x, 0, vx, this.ballSpeed); // Pass the updated speed
+            let vx = random(-3, 3);
+            let vy = random(2, 6);
+            let ball = new Ball(x, 0, vx, vy); // Pass the updated speed
             this.balls.push(ball);
         }
 
