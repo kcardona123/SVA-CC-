@@ -5,8 +5,9 @@ class Game {
         this.lives = 3;
         this.score = 0;
         this.gameStarted = false;
-        this.ballSpeed = 3; // Initial speed
-        this.spawnRate = 60; // Initial spawn rate (one ball every 60 frames)
+        this.ballSpeed = 3; // Initial ball speed
+        this.spawnRate = 60; // Initial spawn rate
+        this.ballsDropped = 0; // Track balls dropped
     }
 
     startGame() {
@@ -15,15 +16,16 @@ class Game {
         this.particles = [];
         this.lives = 3;
         this.score = 0;
-        this.ballSpeed = 3; // Reset speed
-        this.spawnRate = 60; // Reset spawn rate
+        this.ballSpeed = 3; // Reset ball speed to initial value
+        this.spawnRate = 60; // Reset spawn rate to initial value
+        this.ballsDropped = 0; // Reset the number of balls dropped
     }
 
     update() {
         // Increase difficulty over time
         if (frameCount % 300 === 0) { // Every 5 seconds
-            this.ballSpeed += 0.5; // Increase speed of falling balls
-            this.spawnRate = max(10, this.spawnRate - 5); // Decrease spawn rate (spawn faster)
+            this.ballSpeed += 0.5; // Increase ball speed
+            this.spawnRate = max(10, this.spawnRate - 5); // Increase ball spawn rate (faster spawn)
         }
 
         // Spawn balls at the current spawn rate
@@ -50,14 +52,14 @@ class Game {
             this.particles[i].update();
             this.particles[i].display();
             if (this.particles[i].finished()) {
-                this.particles.splice(i, 1); 
+                this.particles.splice(i, 1);
             }
         }
     }
 
     spawnBall() {
         let ballsToSpawn = 1;
-    
+
         // Increase number of balls spawned over time
         if (frameCount > 300) { // After 5 seconds
             ballsToSpawn = 2; // Spawn 2 balls
@@ -65,19 +67,23 @@ class Game {
         if (frameCount > 600) { // After 10 seconds
             ballsToSpawn = 3; // Spawn 3 balls
         }
-    
+
+        // Spawn balls with current ballSpeed
         for (let i = 0; i < ballsToSpawn; i++) {
             let x = random(100, 500);
             let vx = random(-2, 2);
-            let ball = new Ball(x, 0, vx, this.ballSpeed); // Pass the increasing speed
+            let ball = new Ball(x, 0, vx, this.ballSpeed); // Pass the updated speed
             this.balls.push(ball);
         }
+
+        // Track how many balls have been spawned
+        this.ballsDropped += ballsToSpawn;
     }
 
     loseLife() {
         this.lives--;
         if (this.lives <= 0) {
-            this.resetGame();
+            this.resetGame();  // Reset the game when lives reach 0
         }
     }
 
@@ -86,9 +92,11 @@ class Game {
         this.balls = [];
         this.particles = [];
         this.lives = 3;
-        this.score = 0;
-        this.ballSpeed = 3; // Reset speed
-        this.spawnRate = 60; // Reset spawn rate
+        this.score = 0; // Reset score
+        this.ballSpeed = 3; // Reset to initial ball speed
+        this.spawnRate = 60; // Reset to initial spawn rate
+        this.ballsDropped = 0; // Reset balls dropped counter
+        frameCount = 0;
     }
 
     displayUI() {
