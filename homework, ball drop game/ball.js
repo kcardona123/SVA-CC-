@@ -1,8 +1,9 @@
 class Ball {
     constructor(x, y, vx) {
         this.r = 20; // Base radius
+        let vy = random(2, 5); // Random vertical velocity (adjust range as needed)
         this.body = Matter.Bodies.circle(x, y, this.r, { restitution: 0.6 });
-        Matter.Body.setVelocity(this.body, { x: vx, y: 3 });
+        Matter.Body.setVelocity(this.body, { x: vx, y: vy }); // Apply random vertical velocity
         Matter.World.add(world, this.body);
         
         // Create a smoother irregular shape

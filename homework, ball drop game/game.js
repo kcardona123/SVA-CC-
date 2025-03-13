@@ -16,7 +16,7 @@ class Game {
         this.particles = [];
         this.lives = 3;
         this.score = 0;
-        this.ballSpeed = 3; // Reset ball speed to initial value
+        this.ballSpeed = random(2, 10); // Reset ball speed to initial value
         this.spawnRate = 60; // Reset spawn rate to initial value
         this.ballsDropped = 0; // Reset the number of balls dropped
         frameCount = 0;
@@ -73,7 +73,7 @@ class Game {
         for (let i = 0; i < ballsToSpawn; i++) {
             let x = random(100, 500);
             let vx = random(-3, 3);
-            let vy = random(2, 6);
+            let vy = random(2, 10);
             let ball = new Ball(x, 0, vx, vy); // Pass the updated speed
             this.balls.push(ball);
         }
