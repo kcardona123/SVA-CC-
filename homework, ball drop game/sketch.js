@@ -8,6 +8,13 @@ function setup() {
     world = engine.world;
     world.gravity.y = 0.5;
 
+    // Create left and right boundaries (walls)
+    let leftWall = Matter.Bodies.rectangle(0, height / 2, 10, height, { isStatic: true });
+    let rightWall = Matter.Bodies.rectangle(width, height / 2, 10, height, { isStatic: true });
+
+    // Add walls to the world
+    Matter.World.add(world, [leftWall, rightWall]);
+
     game = new Game();
     startButton = new StartButton();
 }
