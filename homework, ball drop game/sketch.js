@@ -1,41 +1,42 @@
 let engine, world;
-let balls = [];
-let particles = [];
-let score = 0;
-let lives = 3;
-let gameStarted = false;
+let game;
+let startButton;
 
 function setup() {
     createCanvas(600, 600);
     engine = Matter.Engine.create();
     world = engine.world;
-    Matter.Engine.run(engine);
+    world.gravity.y = 0.5; // Gravity for the balls
+
+    game = new Game();
+    startButton = new StartButton();
 }
 
 function draw() {
-    background(0);
-    
-    if (!gameStarted) {
-        drawStartScreen();
-        return;
+    background(220);
+    Matter.Engine.update(engine);
+
+    if (!game.gameStarted) {
+        startButton.display();
+    } else {
+        game.update();
+        displayUI();
     }
-    
-    updateGame();
-    displayUI();
 }
 
 function mousePressed() {
-    if (!gameStarted) {
-        gameStarted = true;
+    if (!game.gameStarted) {
+        startButton.checkClick();
         return;
     }
-    
-    for (let i = balls.length - 1; i >= 0; i--) {
-        if (balls[i].isClicked(mouseX, mouseY)) {
-            score++;
-            particles.push(new ParticleEffect(balls[i].body.position.x, balls[i].body.position.y));
-            balls[i].removeFromWorld();
-            balls.splice(i, 1);
+
+    for (let i = game.balls.length - 1; i >= 0; i--) {
+        if (game.balls[i].clicked(mouseX, mouseY)) {
+            game.score += 10;
+            game.particles.push(new ParticleEffect(game.balls[i].body.position.x, game.balls[i].body.position.y));
+            Matter.World.remove(world, game.balls[i].body);
+            game.balls.splice(i, 1);
+            break;
         }
     }
 }

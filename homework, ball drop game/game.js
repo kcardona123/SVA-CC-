@@ -1,34 +1,61 @@
-function updateGame() {
-    if (frameCount % 60 === 0) {
-        balls.push(new Ball(random(width), -20, random(-2, 2), random(2, 5)));
+class Game {
+    constructor() {
+        this.balls = [];
+        this.particles = [];
+        this.lives = 3;
+        this.score = 0;
+        this.gameStarted = false;
     }
-    
-    for (let i = balls.length - 1; i >= 0; i--) {
-        balls[i].show();
-        if (balls[i].offScreen()) {
-            lives--;
-            balls[i].removeFromWorld();
-            balls.splice(i, 1);
-        }
-    }
-    
-    for (let i = particles.length - 1; i >= 0; i--) {
-        particles[i].update();
-        particles[i].show();
-        if (particles[i].finished()) {
-            particles.splice(i, 1);
-        }
-    }
-    
-    if (lives <= 0) {
-        resetGame();
-    }
-}
 
-function resetGame() {
-    gameStarted = false;
-    balls = [];
-    particles = [];
-    score = 0;
-    lives = 3;
+    startGame() {
+        this.gameStarted = true;
+        this.balls = [];
+        this.particles = [];
+        this.lives = 3;
+        this.score = 0;
+    }
+
+    update() {
+        if (frameCount % 60 === 0) {
+            this.spawnBall();
+        }
+
+        for (let i = this.balls.length - 1; i >= 0; i--) {
+            this.balls[i].update();
+            this.balls[i].display();
+            if (this.balls[i].isOffScreen()) {
+                this.balls.splice(i, 1);
+                this.loseLife();
+            }
+        }
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update();
+            if (this.particles[i].finished()) {
+                this.particles.splice(i, 1);
+            }
+        }
+    }
+
+    spawnBall() {
+        let x = random(100, 500);
+        let vx = random(-2, 2); // Horizontal velocity
+        let ball = new Ball(x, 0, vx);
+        this.balls.push(ball);
+    }
+
+    loseLife() {
+        this.lives--;
+        if (this.lives <= 0) {
+            this.resetGame();
+        }
+    }
+
+    resetGame() {
+        this.gameStarted = false;
+        this.balls = [];
+        this.particles = [];
+        this.lives = 3;
+        this.score = 0;
+    }
 }

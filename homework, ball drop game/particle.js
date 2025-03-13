@@ -1,23 +1,32 @@
 class ParticleEffect {
     constructor(x, y) {
+        this.x = x;
+        this.y = y;
         this.particles = [];
         for (let i = 0; i < 10; i++) {
-            this.particles.push({ x, y, angle: TWO_PI * i / 10, life: 30 });
+            this.particles.push({
+                angle: TWO_PI * (i / 10),
+                speed: random(1, 3),
+                life: 30
+            });
         }
     }
+
     update() {
-        this.particles.forEach(p => p.life--);
+        for (let p of this.particles) {
+            p.life--;
+        }
     }
-    show() {
-        this.particles.forEach(p => {
-            if (p.life > 0) {
-                let px = p.x + cos(p.angle) * (30 - p.life);
-                let py = p.y + sin(p.angle) * (30 - p.life);
-                fill(255, 255, 0);
-                ellipse(px, py, 5);
-            }
-        });
+
+    display() {
+        for (let p of this.particles) {
+            let px = this.x + cos(p.angle) * p.speed * (30 - p.life);
+            let py = this.y + sin(p.angle) * p.speed * (30 - p.life);
+            fill(255, 150, 0);
+            ellipse(px, py, 5);
+        }
     }
+
     finished() {
         return this.particles.every(p => p.life <= 0);
     }

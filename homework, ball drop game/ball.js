@@ -1,25 +1,28 @@
 class Ball {
-    constructor(x, y, vx, vy) {
-        this.body = Matter.Bodies.circle(x, y, 20);
-        Matter.Body.setVelocity(this.body, { x: vx, y: vy });
+    constructor(x, y, vx) {
+        this.r = 20;
+        this.body = Matter.Bodies.circle(x, y, this.r, { restitution: 0.6 });
+        Matter.Body.setVelocity(this.body, { x: vx, y: 3 });
         Matter.World.add(world, this.body);
     }
 
-    show() {
-        fill(255, 0, 0);
-        ellipse(this.body.position.x, this.body.position.y, 40);
+    update() {
+        // Ball movement is handled by Matter.js physics
     }
 
-    isClicked(mx, my) {
-        let d = dist(mx, my, this.body.position.x, this.body.position.y);
-        return d < 20;
+    display() {
+        let pos = this.body.position;
+        fill(0);
+        noStroke();
+        ellipse(pos.x, pos.y, this.r * 2);
     }
 
-    offScreen() {
-        return this.body.position.y > height;
+    isOffScreen() {
+        return this.body.position.y > height + this.r;
     }
 
-    removeFromWorld() {
-        Matter.World.remove(world, this.body);
+    clicked(px, py) {
+        let d = dist(px, py, this.body.position.x, this.body.position.y);
+        return d < this.r;
     }
 }

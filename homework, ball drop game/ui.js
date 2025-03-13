@@ -1,13 +1,31 @@
 function displayUI() {
-    fill(255);
+    fill(0);
     textSize(20);
-    text(`Score: ${score}`, 10, 40);
-    text(`Lives: ${lives}`, width - 80, 40);
+    textAlign(RIGHT);
+    text(`Lives: ${lives}`, width - 20, 30);
+    text(`Score: ${score}`, width - 20, 60);
 }
 
-function drawStartScreen() {
-    fill(255);
-    textSize(30);
-    textAlign(CENTER, CENTER);
-    text("Click to Start", width / 2, height / 2);
+class StartButton {
+    constructor() {
+        this.x = width / 2 - 75;
+        this.y = height / 2 - 25;
+        this.w = 150;
+        this.h = 50;
+    }
+
+    display() {
+        fill(0);
+        rect(this.x, this.y, this.w, this.h, 10);
+        fill(255);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+        text("Click to Start", this.x + this.w / 2, this.y + this.h / 2);
+    }
+
+    checkClick() {
+        if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+            gameStarted = true;
+        }
+    }
 }
