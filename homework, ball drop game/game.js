@@ -20,6 +20,7 @@ class Game {
             this.spawnBall();
         }
 
+        
         for (let i = this.balls.length - 1; i >= 0; i--) {
             this.balls[i].update();
             this.balls[i].display();
@@ -29,10 +30,16 @@ class Game {
             }
         }
 
+       
+        this.displayParticles();
+    }
+
+    displayParticles() {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             this.particles[i].update();
+            this.particles[i].display();
             if (this.particles[i].finished()) {
-                this.particles.splice(i, 1);
+                this.particles.splice(i, 1); 
             }
         }
     }

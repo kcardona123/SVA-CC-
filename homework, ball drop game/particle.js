@@ -7,14 +7,14 @@ class ParticleEffect {
             this.particles.push({
                 angle: TWO_PI * (i / 10),
                 speed: random(1, 3),
-                life: 30
+                life: 30 // Lifetime of particles
             });
         }
     }
 
     update() {
         for (let p of this.particles) {
-            p.life--;
+            p.life--; // Reduce lifetime
         }
     }
 
@@ -23,6 +23,7 @@ class ParticleEffect {
             let px = this.x + cos(p.angle) * p.speed * (30 - p.life);
             let py = this.y + sin(p.angle) * p.speed * (30 - p.life);
             fill(255, 150, 0);
+            noStroke();
             ellipse(px, py, 5);
         }
     }

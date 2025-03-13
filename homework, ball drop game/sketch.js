@@ -33,7 +33,11 @@ function mousePressed() {
     for (let i = game.balls.length - 1; i >= 0; i--) {
         if (game.balls[i].clicked(mouseX, mouseY)) {
             game.score += 10;
-            game.particles.push(new ParticleEffect(game.balls[i].body.position.x, game.balls[i].body.position.y));
+            let ballPos = game.balls[i].body.position;
+            
+            // Add the particle effect at the clicked ball's position
+            game.particles.push(new ParticleEffect(ballPos.x, ballPos.y));
+            
             Matter.World.remove(world, game.balls[i].body);
             game.balls.splice(i, 1);
             break;
