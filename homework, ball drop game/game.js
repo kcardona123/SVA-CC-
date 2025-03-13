@@ -83,10 +83,17 @@ class Game {
 
     loseLife() {
         this.lives--;
+    
         if (this.lives <= 0) {
-            this.resetGame();  // Reset the game when lives reach 0
+            // Update High Score & Longest Time
+            highScore = max(highScore, this.score);
+            let survivalTime = (millis() - this.startTime) / 1000;
+            longestTime = max(longestTime, survivalTime);
+            this.gameStarted = false;
+            this.resetGame();
         }
     }
+    
 
     resetGame() {
         this.gameStarted = false;

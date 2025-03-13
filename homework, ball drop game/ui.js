@@ -1,9 +1,12 @@
+let highScore = 0;
+let longestTime = 0;
+
 function displayUI() {
     fill(0);
     textSize(20);
     textAlign(RIGHT);
-    text(`Lives: ${lives}`, width - 20, 30);
-    text(`Score: ${score}`, width - 20, 60);
+    text(`Lives: ${game.lives}`, width - 20, 30);
+    text(`Score: ${game.score}`, width - 20, 60);
 }
 
 class StartButton {
@@ -21,6 +24,13 @@ class StartButton {
         textSize(20);
         textAlign(CENTER, CENTER);
         text("Click to Start", this.x + this.w / 2, this.y + this.h / 2);
+
+        // Display High Score & Longest Time
+        fill(0);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+        text(`High Score: ${highScore}`, width / 2, height / 2 + 70);
+        text(`Longest Time: ${longestTime.toFixed(2)}s`, width / 2, height / 2 + 100);
     }
 
     checkClick() {
@@ -30,7 +40,8 @@ class StartButton {
             mouseY > this.y &&
             mouseY < this.y + this.h
         ) {
-            game.startGame(); // Now correctly starts the game
+            game.startGame();
+            game.startTime = millis(); // Track the new game start time
         }
     }
 }
