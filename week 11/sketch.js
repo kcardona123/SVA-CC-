@@ -56,7 +56,16 @@ function draw () {
     fill(0);
     textSize(18);
     const time = new Date(currentTime);
-    text(time.toString(), 50, 50);
+    text(formatTime(time), 50, 50);
 }
 
- 
+ function formatTime(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    
+    hours = hours % 12;
+    hours = hours ? hours :12;
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    return hours + ':'+ minutes + ' ' + ampm;
+ }
