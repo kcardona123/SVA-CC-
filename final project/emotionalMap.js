@@ -92,19 +92,26 @@ function updateAndDrawRaindrops() {
 let fogParticles = [];
 
 function drawCloudOverlay() {
-  emitFogFromRing();
+  
   updateAndDrawFog();
+}
+
+function switchEmotion(emotion) {
+  if (emotion === "Contemplative") {
+    emitFogFromRing();
+  }
+
 }
 
 function emitFogFromRing() {
   if (fluidParticles.length === 0) return;
-
+  
   for (let i = 0; i < fluidParticles.length; i++) {
     if (random() < 0.2) { // Adjust fog density
       let pos = getParticlePosition(fluidParticles[i]);
       fogParticles.push({
         x: width / 2 + pos.x,
-        y: height / 2 + pos.y,
+        y: height / 2 + psos.y,
         vx: random(-0.2, 0.2),
         vy: random(-0.1, 0.3),
         alpha: 100,
@@ -262,21 +269,26 @@ function drawRotatingRing(time) {
   let minute = int(time.slice(14, 16));
   let timeOfDay = hour + minute / 60;
 
+  if (prevHour !== hour) {
+    gTime = 0;
+    prevHour = hour;
+  }
+
   // Color transition factor (t) based on time of day
   let t;
   if (timeOfDay >= 6 && timeOfDay <= 18) {
-    t = map(timeOfDay, 6, 18, 0, 1); // Morning to evening
+    t = map(hour, 6, 18, 0, 1); // Morning to evening
   } else if (timeOfDay > 18) {
-    t = map(timeOfDay, 18, 24, 1, 0); // Evening to night
+    t = map(hour, 18, 24, 1, 0); // Evening to night
   } else {
-    t = map(timeOfDay, 0, 6, 1, 0); // Night to morning
+    t = map(hour, 0, 6, 1, 0); // Night to morning
   }
-
   // Define day and night colors
   let nightColor = color(75, 0, 130);     // Indigo
   let dayColor = color(255, 255, 200);    // Cream
-  let baseColor = lerpColor(nightColor, dayColor, t);
 
+  
+  let baseColor = lerpColor(nightColor, dayColor, sinTime);
   // Rotate all particles slightly
   for (let p of fluidParticles) {
     p.angle += p.speed;

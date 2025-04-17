@@ -5,14 +5,19 @@ let manhattanMap;
 
 let scrubX = 0;
 let isScrubbing = false;
-let startTime; // For tracking time since start
+let startTime;
+
+let gTime = 0;
+let sinTime = 0;
+let prevHour = -1;
+
+let currentEmotion = "";
 
 function preload() {
   manhattanMap = loadImage('manhattanMap.png');
 
-  // Updated API link for historical data in 2024
   let url = "https://archive-api.open-meteo.com/v1/archive?latitude=40.7834&longitude=-73.9663&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m,apparent_temperature,precipitation,relative_humidity_2m,weather_code,wind_speed_10m,cloud_cover&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch";
-  
+
   weatherData = loadJSON(url);
 }
 
@@ -20,11 +25,13 @@ function setup() {
   createCanvas(1000, 600);
   processWeatherData();
   frameRate(60);
-  startTime = millis(); // Record time sketch starts
+  startTime = millis();
 }
 
 function draw() {
   background(0);
+  gTime += 1/frameRate();
+  sinTime = sin(gTime * Math.PI);
   image(manhattanMap, 0, 0, width, height);
 
   if (!isScrubbing) {
@@ -33,21 +40,26 @@ function draw() {
 
   if (emotionalStates.length > 0) {
     let state = emotionalStates[currentIndex];
-    drawEmotionEffect(state.emotion, state.time); // Pass time to drawEmotionEffect
-    drawLabel(state);
+    
+    if (currentEmotion !== state.emotion[0]) {
+      console.log("switchEmotion",currentEmotion )
+      currentEmotion = state.emotion[0];
+      switchEmotion(currentEmotion);
+    }
+    drawEmotionEffect(state.emotion, state.time);
+    drawTopRightLabel(state);
+    drawCenteredTime(state.time);
   }
 
   drawScrubber();
 }
 
+
+
 function updateCurrentIndexLive() {
   let secondsPassed = (millis() - startTime) / 1000.0;
   let newIndex = floor(secondsPassed);
-  if (newIndex < emotionalStates.length) {
-    currentIndex = newIndex;
-  } else {
-    currentIndex = emotionalStates.length - 1; // Clamp to last index
-  }
+  currentIndex = min(newIndex, emotionalStates.length - 1);
 }
 
 function processWeatherData() {
@@ -83,20 +95,51 @@ function formatDateTime(timestamp) {
   return `${date} ${time.slice(0, 5)}`;
 }
 
-function drawLabel(state) {
+// NEW: Clean Top Right Info Box
+function drawTopRightLabel(state) {
+  let boxWidth = 340;
+  let boxHeight = 130; // increased height for multi-line emotion
+  let x = width - boxWidth - 10;
+  let y = 10;
+
   fill(0, 180);
-  rect(10, 10, 360, 80, 10);
+  rect(x, y, boxWidth, boxHeight, 10);
 
   fill(255);
   textSize(14);
   textAlign(LEFT, TOP);
-  text(`Time: ${formatDateTime(state.time)}`, 20, 20);
-  text(`Temp: ${state.temp}°F`, 20, 40);
-  text(`Apparent Temp: ${state.apparentTemp}°F`, 140, 40);
-  text(`Precip: ${state.precip} in`, 240, 40);
-  text(`Clouds: ${state.cloud}%`, 20, 60);
-  text(`Humidity: ${state.humidity}%`, 140, 60);
-  text(`Emotion: ${state.emotion}`, 240, 60);
+
+  let lineHeight = 20;
+  let leftColX = x + 10;
+  let rightColX = x + boxWidth / 2;
+
+  // Draw other info
+  text(`Temp: ${state.temp}°F`, leftColX, y + 10);
+  text(`Apparent: ${state.apparentTemp}°F`, rightColX, y + 10);
+  text(`Precip: ${state.precip} in`, leftColX, y + 10 + lineHeight);
+  text(`Cloud Cover: ${state.cloud}%`, rightColX, y + 10 + lineHeight);
+  text(`Humidity: ${state.humidity}%`, leftColX, y + 10 + lineHeight * 2);
+
+  // Emotion(s)
+  let emotionList = typeof state.emotion === "string"
+    ? state.emotion.split(",").map(e => e.trim())
+    : state.emotion;
+
+  text(`Emotion:`, rightColX, y + 10 + lineHeight * 2);
+
+  for (let i = 0; i < emotionList.length; i++) {
+    text(emotionList[i], rightColX + 10, y + 10 + lineHeight * (3 + i));
+  }
+}
+
+
+// NEW: Centered Time & Date above scrubber
+function drawCenteredTime(timestamp) {
+  let dateTime = formatDateTime(timestamp);
+  fill(255);
+  textSize(16);
+  textAlign(CENTER, BOTTOM);
+  text(dateTime, width / 2, height - 40);
 }
 
 function drawScrubber() {
@@ -129,7 +172,6 @@ function mouseDragged() {
 
 function mouseReleased() {
   isScrubbing = false;
-  // Update startTime so live sync resumes from scrubbed position
   startTime = millis() - currentIndex * 1000;
 }
 
