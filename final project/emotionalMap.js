@@ -5,7 +5,7 @@ function mapWeatherToEmotion(temp, precip, cloud) {
     return "Contemplative";
   } else if (temp > 80) {
     return "Energetic";
-  } else if (temp < 40) {
+  } else if (temp < 60) {
     return "Calm";
   } else {
     return "Neutral";
@@ -74,10 +74,49 @@ function updateAndDrawRaindrops() {
 }
 
 
+let fogParticles = [];
+
 function drawCloudOverlay() {
-  noStroke();
-  fill(200, 200, 200, 90);
-  ellipse(width / 2, height / 2, 600, 300);
+  emitFogFromRing();
+  updateAndDrawFog();
+}
+
+function emitFogFromRing() {
+  if (fluidParticles.length === 0) return;
+
+  for (let i = 0; i < fluidParticles.length; i++) {
+    if (random() < 0.2) { // Adjust fog density
+      let pos = getParticlePosition(fluidParticles[i]);
+      fogParticles.push({
+        x: width / 2 + pos.x,
+        y: height / 2 + pos.y,
+        vx: random(-0.2, 0.2),
+        vy: random(-0.1, 0.3),
+        alpha: 100,
+        size: random(40, 80),
+        life: 255
+      });
+    }
+  }
+}
+
+function updateAndDrawFog() {
+  for (let i = fogParticles.length - 1; i >= 0; i--) {
+    let p = fogParticles[i];
+
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.8;
+    p.alpha = map(p.life, 0, 255, 0, 100);
+
+    noStroke();
+    fill(200, 200, 200, p.alpha);
+    ellipse(p.x, p.y, p.size);
+
+    if (p.life <= 0) {
+      fogParticles.splice(i, 1);
+    }
+  }
 }
 
 function drawSunburst() {
