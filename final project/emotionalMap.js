@@ -1,5 +1,5 @@
 function mapWeatherToEmotion(temp, precip, cloud) {
-  if (precip > 0.1) {
+  if (precip > 0.001) {
     return "Melancholy";
   } else if (cloud > 70) {
     return "Contemplative";
@@ -35,12 +35,44 @@ function drawEmotionEffect(emotion, time) {
   drawRotatingRing(time);
 }
 
+let raindrops = [];
+
 function drawRainEffect() {
-  for (let i = 0; i < 200; i++) {
-    stroke(150, 150, 255, 100);
-    line(random(width), random(height), random(width), random(height) + 10);
+  emitRaindropsFromRing();
+  updateAndDrawRaindrops();
+}
+
+function emitRaindropsFromRing() {
+  if (fluidParticles.length === 0) return;
+
+  for (let i = 0; i < fluidParticles.length; i++) {
+    if (random() < 0.3) { // Lower = fewer drops = more subtle
+      let pos = getParticlePosition(fluidParticles[i]);
+      raindrops.push({
+        x: width / 2 + pos.x,
+        y: height / 2 + pos.y,
+        speed: random(4, 7),
+        len: random(8, 14),
+        alpha: 200
+      });
+    }
   }
 }
+
+function updateAndDrawRaindrops() {
+  for (let i = raindrops.length - 1; i >= 0; i--) {
+    let r = raindrops[i];
+    stroke(150, 150, 255, r.alpha);
+    line(r.x, r.y, r.x, r.y + r.len);
+    r.y += r.speed;
+    r.alpha -= 2;
+
+    if (r.y > height || r.alpha < 0) {
+      raindrops.splice(i, 1); // Remove if off screen or invisible
+    }
+  }
+}
+
 
 function drawCloudOverlay() {
   noStroke();

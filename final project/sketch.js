@@ -2,10 +2,10 @@ let weatherData;
 let emotionalStates = [];
 let currentIndex = 0;
 let manhattanMap;
-let interval = 60;
 
 let scrubX = 0;
 let isScrubbing = false;
+let startTime; // For tracking time since start
 
 function preload() {
   manhattanMap = loadImage('manhattanMap.png');
@@ -20,25 +20,35 @@ function setup() {
   createCanvas(1000, 600);
   processWeatherData();
   frameRate(60);
+  startTime = millis(); // Record time sketch starts
 }
 
 function draw() {
-    background(0);
-    image(manhattanMap, 0, 0, width, height);
-  
-    if (emotionalStates.length > 0) {
-      let state = emotionalStates[currentIndex];
-      drawEmotionEffect(state.emotion, state.time); // Pass time to drawEmotionEffect
-      drawLabel(state);
-    }
-  
-    drawScrubber();
-  
-    if (!isScrubbing && frameCount % interval === 0) {
-      currentIndex = (currentIndex + 1) % emotionalStates.length;
-    }
+  background(0);
+  image(manhattanMap, 0, 0, width, height);
+
+  if (!isScrubbing) {
+    updateCurrentIndexLive();
   }
-  
+
+  if (emotionalStates.length > 0) {
+    let state = emotionalStates[currentIndex];
+    drawEmotionEffect(state.emotion, state.time); // Pass time to drawEmotionEffect
+    drawLabel(state);
+  }
+
+  drawScrubber();
+}
+
+function updateCurrentIndexLive() {
+  let secondsPassed = (millis() - startTime) / 1000.0;
+  let newIndex = floor(secondsPassed);
+  if (newIndex < emotionalStates.length) {
+    currentIndex = newIndex;
+  } else {
+    currentIndex = emotionalStates.length - 1; // Clamp to last index
+  }
+}
 
 function processWeatherData() {
   let temp = weatherData.hourly.temperature_2m;
@@ -48,12 +58,10 @@ function processWeatherData() {
   let cloud = weatherData.hourly.cloud_cover;
   let time = weatherData.hourly.time;
 
-  // Loop through every 6th data point (assuming hourly data)
   for (let i = 0; i < temp.length; i += 6) {
     let timestamp = time[i];
     let dateOnly = timestamp.split("T")[0];
 
-    // Now includes data from January 1st, 2024
     if (dateOnly >= "2024-01-01") {
       let emotion = mapWeatherToEmotion(temp[i], precip[i], cloud[i]);
       emotionalStates.push({
@@ -72,7 +80,7 @@ function processWeatherData() {
 
 function formatDateTime(timestamp) {
   let [date, time] = timestamp.split("T");
-  return `${date} ${time.slice(0, 5)}`; // e.g., 2024-01-01 13:00
+  return `${date} ${time.slice(0, 5)}`;
 }
 
 function drawLabel(state) {
@@ -121,6 +129,8 @@ function mouseDragged() {
 
 function mouseReleased() {
   isScrubbing = false;
+  // Update startTime so live sync resumes from scrubbed position
+  startTime = millis() - currentIndex * 1000;
 }
 
 function updateScrub(x) {
