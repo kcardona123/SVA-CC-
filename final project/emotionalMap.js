@@ -119,15 +119,56 @@ function updateAndDrawFog() {
   }
 }
 
+let fireParticles = [];
+
 function drawSunburst() {
-  push();
-  translate(width / 2, height / 2);
-  for (let i = 0; i < 360; i += 15) {
-    stroke(255, 180, 0, 150);
-    line(0, 0, 300 * cos(radians(i)), 300 * sin(radians(i)));
-  }
-  pop();
+  emitFireFromRing();
+  updateAndDrawFire();
 }
+
+function emitFireFromRing() {
+  if (fluidParticles.length === 0) return;
+
+  for (let i = 0; i < fluidParticles.length; i++) {
+    if (random() < 0.3) { // Adjust fire density
+      let pos = getParticlePosition(fluidParticles[i]);
+      fireParticles.push({
+        x: width / 2 + pos.x,
+        y: height / 2 + pos.y,
+        vx: random(-0.2, 0.2),
+        vy: random(-2, -4), // Move upward (negative Y velocity)
+        alpha: 255,
+        size: random(8, 20),
+        life: 255,
+        color: color(random(255, 255), random(150, 255), 0) // Fire colors: yellow to red
+      });
+    }
+  }
+}
+
+function updateAndDrawFire() {
+  for (let i = fireParticles.length - 1; i >= 0; i--) {
+    let p = fireParticles[i];
+
+    p.x += p.vx;
+    p.y += p.vy;
+    p.size *= 0.98;  // Shrink fire particles slightly
+    p.alpha -= 2;    // Fade out the fire
+    p.life -= 4;     // Decrease life of particle
+
+    // Change color over time (from yellow to red)
+    let fireColor = lerpColor(color(255, 255, 0), color(255, 0, 0), p.life / 255);
+    
+    noStroke();
+    fill(fireColor.levels[0], fireColor.levels[1], fireColor.levels[2], p.alpha);
+    ellipse(p.x, p.y, p.size);
+
+    if (p.life <= 0) {
+      fireParticles.splice(i, 1);
+    }
+  }
+}
+
 
 function drawSoftBlueWave() {
   noFill();
