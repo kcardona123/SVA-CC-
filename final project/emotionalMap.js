@@ -1,35 +1,50 @@
 function mapWeatherToEmotion(temp, precip, cloud) {
+  let emotions = [];
+  
   if (precip > 0.001) {
-    return "Melancholy";
-  } else if (cloud > 70) {
-    return "Contemplative";
-  } else if (temp > 80) {
-    return "Energetic";
-  } else if (temp < 60) {
-    return "Calm";
-  } else {
-    return "Neutral";
+    emotions.push("Melancholy");
   }
+  
+  if (cloud > 70) {
+    emotions.push("Contemplative");
+  }
+
+  if (temp > 60) {
+    emotions.push("Energetic");
+  }
+  
+  if (temp < 60) {
+    emotions.push("Calm");
+  }
+  
+  if (emotions.length === 0) {
+    emotions.push("Neutral");
+  }
+
+  return emotions;
 }
 
-function drawEmotionEffect(emotion, time) {
-  switch (emotion) {
-    case "Melancholy":
-      drawRainEffect();
-      break;
-    case "Contemplative":
-      drawCloudOverlay();
-      break;
-    case "Energetic":
-      drawSunburst();
-      break;
-    case "Calm":
-      drawSoftBlueWave();
-      break;
-    case "Neutral":
-      drawGentleGlow();
-      break;
-  }
+function drawEmotionEffect(emotions, time) {
+  // Draw each effect for the corresponding emotion
+  emotions.forEach(emotion => {
+    switch (emotion) {
+      case "Melancholy":
+        drawRainEffect();
+        break;
+      case "Contemplative":
+        drawCloudOverlay();
+        break;
+      case "Energetic":
+        drawSunburst();
+        break;
+      case "Calm":
+        drawWindStrokes();
+        break;
+      case "Neutral":
+        drawGentleGlow();
+        break;
+    }
+  });
 
   // Add rotating ring of circles that changes color based on time of day
   drawRotatingRing(time);
@@ -170,18 +185,46 @@ function updateAndDrawFire() {
 }
 
 
-function drawSoftBlueWave() {
+let windStrokes = [];
+
+function drawWindStrokes() {
   noFill();
-  stroke(100, 200, 255, 150);
+  stroke(100, 150, 255, 80);  // Faint blue color
   strokeWeight(2);
-  for (let y = 0; y < height; y += 20) {
+
+  // Create multiple wind strokes with different starting positions and speeds
+  if (windStrokes.length === 0) {
+    for (let i = 0; i < 5; i++) { // Create 5 dynamic wind strokes
+      windStrokes.push({
+        offsetX: random(-1000, 0), // Random start position off-screen
+        speed: random(1, 3),       // Random speed for variety
+        amplitude: random(10, 30), // Random amplitude for wind strokes
+        phaseShift: random(0, TWO_PI), // Random phase shift for variety
+      });
+    }
+  }
+
+  // Draw and update each wind stroke
+  for (let i = 0; i < windStrokes.length; i++) {
+    let strokeData = windStrokes[i];
+
+    // Update the offset for left-to-right movement
+    strokeData.offsetX += strokeData.speed;
+    if (strokeData.offsetX > width) {
+      // Reset the stroke to the left once it goes off-screen
+      strokeData.offsetX = -1000;
+    }
+
+    // Create the wind stroke shape by moving from left to right
     beginShape();
-    for (let x = 0; x < width; x += 10) {
-      vertex(x, y + sin(x * 0.01 + frameCount * 0.05) * 10);
+    for (let x = 0; x < width; x += 20) {
+      let yOffset = sin(x * 0.02 + frameCount * 0.05 + strokeData.phaseShift) * strokeData.amplitude;
+      vertex(x + strokeData.offsetX, height / 2 + yOffset); // Move the stroke left to right
     }
     endShape();
   }
 }
+
 
 function drawGentleGlow() {
   noStroke();
