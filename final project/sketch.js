@@ -23,21 +23,22 @@ function setup() {
 }
 
 function draw() {
-  background(0);
-  image(manhattanMap, 0, 0, width, height);
-
-  if (emotionalStates.length > 0) {
-    let state = emotionalStates[currentIndex];
-    drawEmotionEffect(state.emotion);
-    drawLabel(state);
+    background(0);
+    image(manhattanMap, 0, 0, width, height);
+  
+    if (emotionalStates.length > 0) {
+      let state = emotionalStates[currentIndex];
+      drawEmotionEffect(state.emotion, state.time); // Pass time to drawEmotionEffect
+      drawLabel(state);
+    }
+  
+    drawScrubber();
+  
+    if (!isScrubbing && frameCount % interval === 0) {
+      currentIndex = (currentIndex + 1) % emotionalStates.length;
+    }
   }
-
-  drawScrubber();
-
-  if (!isScrubbing && frameCount % interval === 0) {
-    currentIndex = (currentIndex + 1) % emotionalStates.length;
-  }
-}
+  
 
 function processWeatherData() {
   let temp = weatherData.hourly.temperature_2m;
