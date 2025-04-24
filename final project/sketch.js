@@ -10,6 +10,7 @@ let startTime;
 let gTime = 0;
 let sinTime = 0;
 let prevHour = -1;
+let isPaused = false;
 
 let currentEmotion = "";
 let gcolor = 'rgb(0, 0, 0)'
@@ -36,7 +37,7 @@ function draw() {
   image(manhattanMap, 0, 0, width, height);
   drawVignette();
 
-  if (!isScrubbing) {
+  if (!isScrubbing && !isPaused) {
     updateCurrentIndexLive();
   }
 
@@ -204,4 +205,10 @@ function drawVignette() {
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
+}
+
+function keyPressed() {
+  if (key === ' ') {
+    isPaused = !isPaused;
+  } 
 }
