@@ -13,7 +13,7 @@ function mapWeatherToEmotion(temp, precip, cloud) {
     emotions.push("Energetic");
   }
   
-  if (temp < 60) {
+  if (temp < 50) {
     emotions.push("Calm");
   }
   
@@ -30,18 +30,23 @@ function drawEmotionEffect(emotions, time) {
     switch (emotion) {
       case "Melancholy":
         drawRainEffect();
+        drawMVignette();
         break;
       case "Contemplative":
         drawCloudOverlay();
+        drawC1Vignette();
         break;
       case "Energetic":
         drawSunburst();
+        drawEVignette();
         break;
       case "Calm":
         drawWindStrokes();
+        drawC2Vignette();
         break;
       case "Neutral":
         drawGentleGlow();
+        gcolor = 'rgb(0, 0, 0)'
         break;
     }
   });
@@ -111,7 +116,7 @@ function emitFogFromRing() {
       let pos = getParticlePosition(fluidParticles[i]);
       fogParticles.push({
         x: width / 2 + pos.x,
-        y: height / 2 + psos.y,
+        y: height / 2 + pos.y,
         vx: random(-0.2, 0.2),
         vy: random(-0.1, 0.3),
         alpha: 100,
@@ -328,4 +333,72 @@ function getParticlePosition(p) {
     x: p.radius * cos(p.angle),
     y: p.radius * sin(p.angle),
   };
+}
+
+function drawMVignette() {
+  // Use native canvas context for gradient
+  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let radius = Math.max(width, height) * 0.75;
+
+  // Create radial gradient
+  let gradient = ctx.createRadialGradient(
+    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
+    width / 2, height / 2, radius         // outer circle (center, outer radius)
+  );
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, 'rgb(32, 46, 152)');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+}
+
+function drawC1Vignette() {
+  // Use native canvas context for gradient
+  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let radius = Math.max(width, height) * 0.75;
+
+  // Create radial gradient
+  let gradient = ctx.createRadialGradient(
+    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
+    width / 2, height / 2, radius         // outer circle (center, outer radius)
+  );
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, 'rgb(158, 36, 152)');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+}
+
+function drawEVignette() {
+  // Use native canvas context for gradient
+  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let radius = Math.max(width, height) * 0.75;
+
+  // Create radial gradient
+  let gradient = ctx.createRadialGradient(
+    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
+    width / 2, height / 2, radius         // outer circle (center, outer radius)
+  );
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, 'rgb(255, 251, 0)');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+}
+
+function drawC2Vignette() {
+  // Use native canvas context for gradient
+  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let radius = Math.max(width, height) * 0.75;
+
+  // Create radial gradient
+  let gradient = ctx.createRadialGradient(
+    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
+    width / 2, height / 2, radius         // outer circle (center, outer radius)
+  );
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, 'rgb(65, 208, 149)');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
 }

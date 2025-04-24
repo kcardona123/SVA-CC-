@@ -12,6 +12,7 @@ let sinTime = 0;
 let prevHour = -1;
 
 let currentEmotion = "";
+let gcolor = 'rgb(0, 0, 0)'
 
 function preload() {
   manhattanMap = loadImage('manhattanMap.png');
@@ -33,6 +34,7 @@ function draw() {
   gTime += 1/frameRate();
   sinTime = sin(gTime * Math.PI);
   image(manhattanMap, 0, 0, width, height);
+  drawVignette();
 
   if (!isScrubbing) {
     updateCurrentIndexLive();
@@ -136,10 +138,14 @@ function drawTopRightLabel(state) {
 // NEW: Centered Time & Date above scrubber
 function drawCenteredTime(timestamp) {
   let dateTime = formatDateTime(timestamp);
+  push();
   fill(255);
-  textSize(16);
+  textFont('Arial');
+  textSize(24);
+  noStroke();
   textAlign(CENTER, BOTTOM);
   text(dateTime, width / 2, height - 40);
+  pop();
 }
 
 function drawScrubber() {
@@ -181,4 +187,21 @@ function updateScrub(x) {
   scrubX = constrain(x, margin, width - margin);
   let t = map(scrubX, margin, width - margin, 0, emotionalStates.length - 1);
   currentIndex = floor(t);
+}
+
+function drawVignette() {
+  // Use native canvas context for gradient
+  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let radius = Math.max(width, height) * 0.75;
+
+  // Create radial gradient
+  let gradient = ctx.createRadialGradient(
+    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
+    width / 2, height / 2, radius         // outer circle (center, outer radius)
+  );
+  gradient.addColorStop(0, 'rgba(0,0,0,0)');
+  gradient.addColorStop(1, gcolor);
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
 }
