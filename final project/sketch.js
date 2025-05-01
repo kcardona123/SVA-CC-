@@ -45,19 +45,18 @@ function draw() {
     let state = emotionalStates[currentIndex];
     
     if (currentEmotion !== state.emotion[0]) {
-      console.log("switchEmotion",currentEmotion )
+      console.log("switchEmotion", currentEmotion);
       currentEmotion = state.emotion[0];
       switchEmotion(currentEmotion);
     }
+
     drawEmotionEffect(state.emotion, state.time);
     drawTopRightLabel(state);
-    drawCenteredTime(state.time);
+    drawCenteredTimeWithEmotion(state.emotion, state.time);
   }
 
   drawScrubber();
 }
-
-
 
 function updateCurrentIndexLive() {
   let secondsPassed = (millis() - startTime) / 1000.0;
@@ -98,10 +97,10 @@ function formatDateTime(timestamp) {
   return `${date} ${time.slice(0, 5)}`;
 }
 
-// NEW: Clean Top Right Info Box
+// Top-right weather info box
 function drawTopRightLabel(state) {
   let boxWidth = 340;
-  let boxHeight = 130; // increased height for multi-line emotion
+  let boxHeight = 130;
   let x = width - boxWidth - 10;
   let y = 10;
 
@@ -116,35 +115,32 @@ function drawTopRightLabel(state) {
   let leftColX = x + 10;
   let rightColX = x + boxWidth / 2;
 
-  // Draw other info
   text(`Temp: ${state.temp}°F`, leftColX, y + 10);
   text(`Apparent: ${state.apparentTemp}°F`, rightColX, y + 10);
   text(`Precip: ${state.precip} in`, leftColX, y + 10 + lineHeight);
   text(`Cloud Cover: ${state.cloud}%`, rightColX, y + 10 + lineHeight);
   text(`Humidity: ${state.humidity}%`, leftColX, y + 10 + lineHeight * 2);
 
-  // Emotion(s)
-  let emotionList = typeof state.emotion === "string"
-    ? state.emotion.split(",").map(e => e.trim())
-    : state.emotion;
-
-  text(`Emotion:`, rightColX, y + 10 + lineHeight * 2);
-
-  for (let i = 0; i < emotionList.length; i++) {
-    text(emotionList[i], rightColX + 10, y + 10 + lineHeight * (3 + i));
-  }
 }
 
-
-// NEW: Centered Time & Date above scrubber
-function drawCenteredTime(timestamp) {
+// NEW: Centered emotion + time display
+function drawCenteredTimeWithEmotion(emotionArray, timestamp) {
   let dateTime = formatDateTime(timestamp);
+  let emotions = Array.isArray(emotionArray) ? emotionArray : [emotionArray];
+
   push();
   fill(255);
   textFont('Arial');
-  textSize(24);
+  textSize(20);
   noStroke();
   textAlign(CENTER, BOTTOM);
+
+  // Draw emotions one line above the time
+  let emotionText = emotions.join("  ");
+  text(emotionText, width / 2, height - 70);
+
+  // Draw time
+  textSize(24);
   text(dateTime, width / 2, height - 40);
   pop();
 }
@@ -191,14 +187,12 @@ function updateScrub(x) {
 }
 
 function drawVignette() {
-  // Use native canvas context for gradient
-  let ctx = drawingContext; // alias for canvas.getContext("2d")
+  let ctx = drawingContext;
   let radius = Math.max(width, height) * 0.75;
 
-  // Create radial gradient
   let gradient = ctx.createRadialGradient(
-    width / 2, height / 2, radius * 0.3,  // inner circle (center, inner radius)
-    width / 2, height / 2, radius         // outer circle (center, outer radius)
+    width / 2, height / 2, radius * 0.3,
+    width / 2, height / 2, radius
   );
   gradient.addColorStop(0, 'rgba(0,0,0,0)');
   gradient.addColorStop(1, gcolor);
@@ -210,5 +204,5 @@ function drawVignette() {
 function keyPressed() {
   if (key === ' ') {
     isPaused = !isPaused;
-  } 
+  }
 }
