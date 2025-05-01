@@ -28,6 +28,7 @@ function setup() {
   processWeatherData();
   frameRate(60);
   startTime = millis();
+  textFont('Arial');
 }
 
 function draw() {
@@ -51,7 +52,7 @@ function draw() {
     }
 
     drawEmotionEffect(state.emotion, state.time);
-    drawTopRightLabel(state);
+    drawTopRowLabel(state);
     drawCenteredTimeWithEmotion(state.emotion, state.time);
   }
 
@@ -97,30 +98,34 @@ function formatDateTime(timestamp) {
   return `${date} ${time.slice(0, 5)}`;
 }
 
-// Top-right weather info box
-function drawTopRightLabel(state) {
-  let boxWidth = 340;
-  let boxHeight = 130;
-  let x = width - boxWidth - 10;
-  let y = 10;
+// Top row weather info
+function drawTopRowLabel(state) {
+  let boxHeight = 50;
+  let x = 0;
+  let y = 0;
 
+  noStroke();
   fill(0, 180);
-  rect(x, y, boxWidth, boxHeight, 10);
+  rect(x, y, width, boxHeight);
 
   fill(255);
-  textSize(14);
-  textAlign(LEFT, TOP);
+  textSize(18);
+  textAlign(CENTER, CENTER);
 
-  let lineHeight = 20;
-  let leftColX = x + 10;
-  let rightColX = x + boxWidth / 2;
+  let tempLabel = `Temp: ${state.temp}°F`;
+  let apparentLabel = `Apparent: ${state.apparentTemp}°F`;
+  let precipLabel = `Precip: ${state.precip} in`;
+  let cloudLabel = `Cloud Cover: ${state.cloud}%`;
+  let humidityLabel = `Humidity: ${state.humidity}%`;
 
-  text(`Temp: ${state.temp}°F`, leftColX, y + 10);
-  text(`Apparent: ${state.apparentTemp}°F`, rightColX, y + 10);
-  text(`Precip: ${state.precip} in`, leftColX, y + 10 + lineHeight);
-  text(`Cloud Cover: ${state.cloud}%`, rightColX, y + 10 + lineHeight);
-  text(`Humidity: ${state.humidity}%`, leftColX, y + 10 + lineHeight * 2);
+  let labels = [tempLabel, apparentLabel, precipLabel, cloudLabel, humidityLabel];
 
+  // Distribute text evenly across the top row
+  let spacing = width / labels.length;
+
+  for (let i = 0; i < labels.length; i++) {
+    text(labels[i], x + spacing * (i + 0.5), y + boxHeight / 2);
+  }
 }
 
 // NEW: Centered emotion + time display
@@ -131,7 +136,7 @@ function drawCenteredTimeWithEmotion(emotionArray, timestamp) {
   push();
   fill(255);
   textFont('Arial');
-  textSize(20);
+  textSize(32);
   noStroke();
   textAlign(CENTER, BOTTOM);
 
@@ -140,7 +145,7 @@ function drawCenteredTimeWithEmotion(emotionArray, timestamp) {
   text(emotionText, width / 2, height - 70);
 
   // Draw time
-  textSize(24);
+  textSize(18);
   text(dateTime, width / 2, height - 40);
   pop();
 }
@@ -188,7 +193,7 @@ function updateScrub(x) {
 
 function drawVignette() {
   let ctx = drawingContext;
-  let radius = Math.max(width, height) * 0.75;
+  let radius = Math.max(width, height) * 0.35;
 
   let gradient = ctx.createRadialGradient(
     width / 2, height / 2, radius * 0.3,
